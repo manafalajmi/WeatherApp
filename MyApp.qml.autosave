@@ -107,7 +107,8 @@ App {
 
         Label {
             id: labelTest
-            text: ""+stackView.currentItem       }
+            text: ""+stackView.currentItem    
+        }
     }
 
 
