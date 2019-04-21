@@ -99,15 +99,16 @@ App {
     //              stackView.push(mapView);
     //            }
                 onBack:{
-                stackView.pop();
-                    label.text = "popping"
+                    stackView.clear();
+                    stackView.push(mapView);
                 }
             }
         }
 
         Label {
             id: labelTest
-            text: ""+stackView.currentItem       }
+            text: ""+stackView.currentItem
+        }
     }
 
 

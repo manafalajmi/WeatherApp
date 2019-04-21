@@ -51,14 +51,14 @@ import ArcGIS.AppFramework.Controls 1.0
                      anchors.left: parent.left
                      onClicked:{
                          console.log("adding the map to the view")
-                         back()
+                         back();
                      }
                  }
 
 
 
        Label {
-           id: label
+           id: labelId
            anchors.bottom: parent.bottom
            text: "in mapView"
            anchors.top: backButton.bottom
