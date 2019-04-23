@@ -78,7 +78,7 @@ App {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-//        initialItem: theMapView
+        initialItem: theWeatherView
 
         Button {
             height: 50
@@ -112,6 +112,15 @@ App {
                 }
             }
         }
+
+        Component {
+            id: theWeatherView
+            WeatherView {
+                Component.onCompleted: {
+                }
+            }
+        }
+
 
         Label {
             id: labelTest

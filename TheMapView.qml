@@ -55,19 +55,6 @@ import Esri.ArcGISRuntime 100.3
            anchors.fill: parent
            Map {
                BasemapImagery {}
-
-               // start the location display
-               onLoadStatusChanged: {
-                       // populate list model with modes
-//                    if (loadStatus === Enums.LoadStatusLoaded) {
-//                        autoPanListModel.append({name: compassMode, image:"assets/Compass.png"});
-//                        autoPanListModel.append({name: navigationMode, image:"assets/Navigation.png"});
-//                        autoPanListModel.append({name: recenterMode, image:"assets/Re-Center.png"});
-//                        autoPanListModel.append({name: onMode, image:"assets/Stop.png"});
-//                        autoPanListModel.append({name: stopMode, image:"assets/Stop.png"});
-//                        autoPanListModel.append({name: closeMode, image:"assets/Close.png"});
-//                    }
-               }
            }
 
            // set the location display's position source
