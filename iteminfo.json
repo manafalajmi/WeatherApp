@@ -24,7 +24,7 @@
     "largeThumbnail": null,
     "licenseInfo": null,
     "listed": false,
-    "modified": 1535673151000,
+    "modified": 1555892029676,
     "name": null,
     "numComments": 2,
     "numRatings": 0,
@@ -42,7 +42,7 @@
     "spatialReference": null,
     "tags": null,
     "thumbnail": "thumbnail/thumbnail.png",
-    "title": "HowsTheWeatherUpThere",
+    "title": "Hows The Weather Up There",
     "type": "Native Application",
     "typeKeywords": [
         "API_QML",

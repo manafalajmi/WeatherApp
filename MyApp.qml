@@ -29,7 +29,8 @@ import QtQuick.Layouts 1.1
 
 import ArcGIS.AppFramework 1.0
 import ArcGIS.AppFramework.Controls 1.0
-//import Esri.ArcGISRuntime 100.3
+import Esri.ArcGISRuntime 100.3
+//import Esri.ArcGISRuntime 100.5
 
 App {
     id: app
@@ -77,7 +78,7 @@ App {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-//        initialItem: mapView
+//        initialItem: theMapView
 
         Button {
             height: 50
@@ -87,20 +88,27 @@ App {
             anchors.top:parent.top
             onClicked:{
 //                stackView.pop();
-                stackView.push(mapView);
+//                mapView.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeCompassNavigation;
+//                mapView.locationDisplay.start();
+                stackView.push(theMapView);
 //                labelTest.text = "clicked"
             }
         }
 
+
+
         Component {
-            id: mapView
-            MapView {
+            id: theMapView
+            TheMapView {
     //            onNext: {
     //              stackView.push(mapView);
     //            }
                 onBack:{
-                    stackView.clear();
-                    stackView.push(mapView);
+                    stackView.clear(); //should be pop but doesn't work might be issue of length
+                }
+                Component.onCompleted: {
+//                    mapView.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeCompassNavigation;
+                    theMapView.locationDisplay.start();
                 }
             }
         }
