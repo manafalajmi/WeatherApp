@@ -8,7 +8,7 @@ import ArcGIS.AppFramework 1.0
 import ArcGIS.AppFramework.Controls 1.0
 import Esri.ArcGISRuntime 100.3
 
-   Item {
+   Page {
 //       signal next();
        signal back();
 //       background-color:"black"
