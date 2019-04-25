@@ -87,11 +87,7 @@ App {
             font.pixelSize:20
             anchors.top:parent.top
             onClicked:{
-//                stackView.pop();
-//                mapView.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeCompassNavigation;
-//                mapView.locationDisplay.start();
-                stackView.push(theMapView);
-//                labelTest.text = "clicked"
+
             }
         }
 
@@ -104,7 +100,7 @@ App {
     //              stackView.push(mapView);
     //            }
                 onBack:{
-                    stackView.clear(); //should be pop but doesn't work might be issue of length
+                    stackView.pop(); //should be pop but doesn't work might be issue of length
                 }
                 Component.onCompleted: {
 //                    mapView.locationDisplay.autoPanMode = Enums.LocationDisplayAutoPanModeCompassNavigation;
@@ -117,6 +113,11 @@ App {
             id: theWeatherView
             WeatherView {
                 Component.onCompleted: {
+
+                }
+
+                onOpenMap: {
+                    stackView.push(theMapView);
                 }
             }
         }
