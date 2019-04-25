@@ -11,8 +11,8 @@ import Esri.ArcGISRuntime 100.3
 
 Page {
     //Mock Weather Data
-    property var lon: 47
-    property var lat: 122;
+    property var lon: 0
+    property var lat: 0;
     property date dateChecked: new Date()
     property string city: "Seattle"
     property string weatherDisc: "Windy"
@@ -155,11 +155,16 @@ Page {
                             //TODO check for invalid response
                             console.log(JSON.stringify(networkRequest.response));
                             console.log("Finished the network request with coordinates");
-                            console.log(networkRequest.response["city"]);
-                            city = networkRequest.response["city"]["name"];
-                            currentTemp = networkRequest.response["list"][0]["main"]["temp"];
-                            weatherDisc = networkRequest.response["list"][0]["weather"][0]["description"];
-                            weatherIcon = networkRequest.response["list"][0]["weather"]["0"]["icon"];
+                            console.log(networkRequest.response["city"]["name"]);
+                            if(city !==networkRequest.response["city"]["name"]){
+                                city = networkRequest.response["city"]["name"];
+                                weatherByCity.send({ f: "pjson" } );
+                            }
+                            //Forecast gets data starting at tommorows date
+//                            currentTemp = networkRequest.response["list"][0]["main"]["temp"];
+//                            weatherDisc = networkRequest.response["list"][0]["weather"][0]["description"];
+//                            weatherIcon = networkRequest.response["list"][0]["weather"]["0"]["icon"];
+
                         }
                     }
                 }
@@ -180,6 +185,11 @@ Page {
                             console.log("PRinting out the icon");
                             weatherDisc = weatherByCity.response["weather"][0]["description"];
                             weatherIcon = weatherByCity.response["weather"]["0"]["icon"];
+                            if(lat ===0  && lon ===0) {
+                                lat = weatherByCity.response["coord"]["lat"];
+                                lon = weatherByCity.response["coord"]["lon"];
+                                    networkRequest.send({ f: "pjson" })
+                            }
                             weatherByCity.abort();
                         }
                     }
