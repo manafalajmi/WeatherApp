@@ -21,6 +21,9 @@ Page {
     property int currentTemp: 280;
     property string weatherIcon : "10d"
     property int forecastLength : 5 ;
+    property int humidity: 10;
+    property int high: 10;
+    property int low: 10;
 
     // COMPONENTS
     PositionSource{
@@ -35,9 +38,9 @@ Page {
         }
     }
     Rectangle{
-        color:"#EFEFEF"
+        color:"#9099A2"
         anchors.fill:parent;
-
+        id: page
         Item {
 
             id: todaysTemp
@@ -45,19 +48,6 @@ Page {
             anchors.left: parent.left;
             anchors.right: parent.right;
             height: (2*parent.height)/3;
-            //        color:"red";
-
-            Label {
-                id: temp
-                text: lon
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                color:"white"
-                Component.onCompleted: {
-
-                }
-
-            }
 
             ComboBox {
                 id: forecastLengthBox
@@ -87,11 +77,13 @@ Page {
                 text:dateChecked.toDateString("DD:MM:YYYY")
                 anchors.bottom: todayTempBreakdown.top;
                 anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
+                font.pixelSize: 22;
+                padding:5
             }
 
             Image {
                 anchors.left:todaysDate.right
-                source: "gpsIcon.png"
+                source: "assets/gpsIcon.png"
                 MouseArea {
                     anchors.fill:parent
                     onClicked: {openMap()}
@@ -106,32 +98,8 @@ Page {
                 anchors.top: parent.top
 
                 font.pixelSize: 22;
-                padding: 2;
+                padding: 5;
             }
-
-            //        Row {
-            //            spacing:2;
-            //            anchors.bottom: todaysDate.top;
-            //            anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
-            //            Label {
-            //                id: cityLabel
-            //                text:city
-            //                //                anchors.left: parent.left
-            //                //                anchors.top: parent.top
-
-            //                font.pixelSize: 22;
-            //                padding: 2;
-            //            }
-            ////            Label {
-            ////                id:lattAndLon
-            ////                text: lat + "   " + lon;
-
-
-            ////                font.pixelSize: 22;
-
-            ////            }
-            //        }
-
 
             Rectangle {
                 id: todayTempBreakdown
@@ -157,7 +125,8 @@ Page {
 
                     Label {
                         id: currentTempLabel
-                        text: (currentTemp-270) + "C"
+                        text: (currentTemp-270) +"<sup>o</sup>C"
+                        textFormat: Text.RichText
                         color:"white"
                         anchors.top:  todayTempBreakdown.top;
 
@@ -172,108 +141,31 @@ Page {
 
                     }
                 }
-
-                Label {
-                    id: weatherDiscLabel
-                    text: weatherDisc
-                    //            padding:100
+                Rectangle {
+                    id: weatherDiscBox
                     anchors.top: todayTempBreakdown.bottom;
                     anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
-                    font.pixelSize: parent.width/4;
-                    color:"#FF3B3F"
-                }
-            }
+                    width:todayTempBreakdown.width
+                    height: 40
+                    color:"transparent"
+                    Column{
+                        topPadding: 0
+                        bottomPadding: 0
+                        anchors.horizontalCenter: weatherDiscBox.horizontalCenter;
+                        spacing:0
+                        Text {
+                            text: "Description: " + weatherDisc
+                            color:"#FF3B3F"
+                        }
+                        Text { text: "\n High/Low: " +  (high-270) + "/" + (low-270)
+                            color:"#FF3B3F"
+                        }
 
-
-
-
-
-
-
-            Item {
-                NetworkRequest {
-                    id: networkRequest
-                    url:"http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=3618189b81665d2ecef99b81a314fe1a&cnt="+forecastLength+"&units=metric"
-                    responseType:"json"
-                    //                                Component.onCompleted: networkRequest.send( { f: "pjson" } );
-                    onReadyStateChanged:{
-
-                        //                    console.log(JSON.stringify(networkRequest.response));
-                        if ( readyState === NetworkRequest.DONE) {
-                            //                        console.log("Requst is done status code unknown");
-                            if (status === NetworkRequest.StatusCodeOK){
-                                //TODO check for invalid response
-                                //                            console.log(JSON.stringify(networkRequest.response));
-                                //                            console.log("Finished the network request with coordinates");
-                                //                            console.log(JSON.stringify(networkRequest.response["list"][0]));
-                                if(city !==networkRequest.response["city"]["name"]){
-                                    city = networkRequest.response["city"]["name"];
-                                    weatherByCity.send({ f: "pjson" } );
-                                }
-                                //Forecast gets data starting at tommorows date
-                                //                            currentTemp = networkRequest.response["list"][0]["main"]["temp"];
-                                //                            weatherDisc = networkRequest.response["list"][0]["weather"][0]["description"];
-                                //                            weatherIcon = networkRequest.response["list"][0]["weather"]["0"]["icon"];
-                                forecastModel.clear();
-                                for(var i=0; i<forecastLength; i++){
-                                    //                                console.log(i);
-                                    //                                console.log(JSON.stringify(networkRequest.response["list"][i]["weather"]))
-                                    var description = networkRequest.response["list"][i]["weather"][0]["description"]
-                                    var icon = networkRequest.response["list"][i]["weather"][0]["icon"]
-                                    var humidity= networkRequest.response["list"][i]["main"]["humidity"]
-                                    var futureDate = dateChecked;
-                                    futureDate.setDate(futureDate.getDate()+ i);
-                                    var high = networkRequest.response["list"][i]["main"]["temp_max"]
-                                    var low = networkRequest.response["list"][i]["main"]["temp_min"]
-                                    forecastModel.append({
-                                                             date: futureDate.toDateString("DD:MM:YYYY"),
-                                                             description: description,
-                                                             icon: icon,
-                                                             high: high,
-                                                             low:  low,
-                                                             humidity:humidity,
-                                                         })
-
-
-                                }
-
-
-                            }
+                        Text {text: "\n Humidity: " +humidity
+                            color:"#FF3B3F"
                         }
                     }
                 }
-
-                NetworkRequest{
-                    id: weatherByCity
-                    url:"http://api.openweathermap.org/data/2.5/weather?q="+city +",us&appid=3618189b81665d2ecef99b81a314fe1a&units=metric"
-                    responseType:"json"
-                    Component.onCompleted: weatherByCity.send( { f: "pjson" } );
-                    onReadyStateChanged:{
-
-                        if ( readyState === NetworkRequest.DONE) {
-                            if (status === NetworkRequest.StatusCodeOK){
-
-                                city = weatherByCity.response["name"];
-                                currentTemp = weatherByCity.response["main"]["temp"];
-                                //                            console.log("PRinting out the icon");
-                                weatherDisc = weatherByCity.response["weather"][0]["description"];
-                                weatherIcon = weatherByCity.response["weather"]["0"]["icon"];
-                                if((lat ===0  && lon ===0) || (lat !== weatherByCity.response["coord"]["lat"] || lon !==weatherByCity.response["coord"]["lon"] )) {
-                                    lat = weatherByCity.response["coord"]["lat"];
-                                    lon = weatherByCity.response["coord"]["lon"];
-                                    networkRequest.send({ f: "pjson" })
-                                }
-                                weatherByCity.abort();
-                            }
-                        }
-                    }
-
-                }
-                //            TextArea {
-                //                anchors.left: parent.left
-                //                anchors.top: parent.top
-                //                text: networkRequest.readyState === NetworkRequest.DONE ? networkRequest.responseText : networkRequest.readyState
-                //            }
 
             }
 
@@ -319,19 +211,29 @@ Page {
                 delegate: Column {
                     padding: 10
                     Rectangle {
-                        color: "#CAEBF2";
+                        id:forecastBox
+                        color: "#6D7993";
                         width: 200;
                         height: nDayForecast.height-20
                         Column {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            Text { text: "\n" + date }
-                            Text { text: "\n"  + description }
-                            Image{ source: "http://openweathermap.org/img/w/"+icon+".png"  }
-                            Text { text: "high" + high + "\n"}
-                            Text { text: "low" + low + "\n"}
-                            Text { text: "humidity" + humidity+"%" + "\n"}
+                            anchors.top: parent.top
 
+                            Text {
+                                text: date +  "\n"  + description +"\n"
+                                font.pixelSize: 20;
+                            }
+
+
+                            Text { text: "High/Low:  " + Math.round(high-270) + "/"  + Math.round(low-270) + "\n"}
+                            Text { text: "Humidity:  " + humidity+"%" + "\n"}
+
+                            Image{
+                                id:forecastIcon
+                                source: "http://openweathermap.org/img/w/"+icon+".png"
+                                height:forecastBox.width/4;
+                                width:forecastBox.width/4
+                            }
                         }
                     }
                 }
@@ -346,15 +248,83 @@ Page {
         lon = parseFloat(Number(userPosition.position.coordinate.longitude)).toFixed(3);
 
         networkRequest.send( { f: "pjson" } );
-        //        console.log("LAT: " + lat +" LONG: " + lon);
     }
 
 
 
     Component.onCompleted: {
-        //           console.log("Page is completed");
         userPosition.start();
     }
+    Item {
+        NetworkRequest {
+            id: networkRequest
+            url:"http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=3618189b81665d2ecef99b81a314fe1a&cnt="+forecastLength+"&units=metric"
+            responseType:"json"
+            onReadyStateChanged:{
+                if ( readyState === NetworkRequest.DONE) {
+                    if (status === NetworkRequest.StatusCodeOK){
+                        //TODO check for invalid response
+                        if(city !==networkRequest.response["city"]["name"]){
+                            city = networkRequest.response["city"]["name"];
+                            weatherByCity.send({ f: "pjson" } );
+                        }
+                        //Forecast gets data starting at tommorows date
+                        forecastModel.clear();
+                        for(var i=0; i<forecastLength; i++){
+                            var description = networkRequest.response["list"][i]["weather"][0]["description"]
+                            var icon = networkRequest.response["list"][i]["weather"][0]["icon"]
+                            var humidity= networkRequest.response["list"][i]["main"]["humidity"]
+                            var futureDate = dateChecked;
+                            futureDate.setDate(futureDate.getDate()+ i +1);
+                            var high = networkRequest.response["list"][i]["main"]["temp_max"]
+                            var low = networkRequest.response["list"][i]["main"]["temp_min"]
+                            forecastModel.append({
+                                                     date: futureDate.toDateString("DD:MM:YYYY"),
+                                                     description: description,
+                                                     icon: icon,
+                                                     high: high,
+                                                     low:  low,
+                                                     humidity:humidity,
+                                                 })
+                        }
+
+                    }
+                }
+            }
+        }
+
+        NetworkRequest{
+            id: weatherByCity
+            url:"http://api.openweathermap.org/data/2.5/weather?q="+city +",us&appid=3618189b81665d2ecef99b81a314fe1a&units=metric"
+            responseType:"json"
+            Component.onCompleted: weatherByCity.send( { f: "pjson" } );
+            onReadyStateChanged:{
+
+                if ( readyState === NetworkRequest.DONE) {
+                    if (status === NetworkRequest.StatusCodeOK){
+                        console.log(JSON.stringify(weatherByCity.response))
+                        city = weatherByCity.response["name"];
+                        currentTemp = weatherByCity.response["main"]["temp"];
+                        //                            console.log("PRinting out the icon");
+                        weatherDisc = weatherByCity.response["weather"][0]["description"];
+                        weatherIcon = weatherByCity.response["weather"]["0"]["icon"];
+                        high = weatherByCity.response["main"]["temp_max"];
+                        low = weatherByCity.response["main"]["temp_min"];
+                        humidity = weatherByCity.response["main"]["humidity"];
+                        if((lat ===0  && lon ===0) || (lat !== weatherByCity.response["coord"]["lat"] || lon !==weatherByCity.response["coord"]["lon"] )) {
+                            lat = weatherByCity.response["coord"]["lat"];
+                            lon = weatherByCity.response["coord"]["lon"];
+                            networkRequest.send({ f: "pjson" })
+                        }
+                        weatherByCity.abort();
+                    }
+                }
+            }
+
+        }
+
+    }
+
 }
 
 

@@ -9,46 +9,7 @@ import ArcGIS.AppFramework.Controls 1.0
 import Esri.ArcGISRuntime 100.3
 
    Page {
-//       signal next();
        signal back();
-//       background-color:"black"
-//       color:"black"
-
-//       MapView{
-//           id: mapView
-//       Map {
-//            id: map
-
-//            anchors {
-//                left: parent.left
-//                right: parent.right
-//                top: titleRect.bottom
-//                bottom: parent.bottom
-//                fill: parent
-//            }
-
-//            plugin: Plugin {
-//                preferred: ["ArcGIS"]
-//            }
-
-//            center {
-//                latitude: 34.056573
-//                longitude: -117.195855
-//            }
-
-//            gesture {
-//                flickDeceleration: 3000
-//                enabled: true
-//            }
-
-//            activeMapType: supportedMapTypes[0]
-//            zoomLevel: 15
-
-//        }
-       
-//   }
-
-
        MapView {
            id: mapView
 
@@ -96,13 +57,6 @@ import Esri.ArcGISRuntime 100.3
 
                      }
                  }
-       Label {
-           id: labelId
-           anchors.bottom: parent.bottom
-           text: "in mapView"
-           anchors.top: backButton.bottom
-   }
-
    }
 
 
