@@ -44,7 +44,7 @@ Page {
         anchors.top: parent.top ;
         anchors.left: parent.left;
         anchors.right: parent.right;
-        height: parent.height/2;
+        height: (2*parent.height)/3;
         color:"red";
 
         Label {
@@ -91,7 +91,7 @@ openMap();
                     ListElement { text: "10";}
                 }
 
-            width: 200
+            width: 75
             onCurrentIndexChanged: {
 //                console.log("Changing forecast length");
 //                console.log(forec)
@@ -111,26 +111,38 @@ openMap();
         }
 
 
-        Row {
-            spacing:2;
-            anchors.bottom: todaysDate.top;
-            anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
-            Label {
-                id: cityLabel
-                text:city
+        Label {
+            id: cityLabel
+            text:city
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            anchors.top: parent.top
 
-                font.pixelSize: 22;
-                padding: 2;
-            }
-            Label {
-                id:lattAndLon
-                text: lat + "   " + lon;
-
-
-                font.pixelSize: 22;
-
-            }
+            font.pixelSize: 22;
+            padding: 2;
         }
+
+//        Row {
+//            spacing:2;
+//            anchors.bottom: todaysDate.top;
+//            anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
+//            Label {
+//                id: cityLabel
+//                text:city
+//                //                anchors.left: parent.left
+//                //                anchors.top: parent.top
+
+//                font.pixelSize: 22;
+//                padding: 2;
+//            }
+////            Label {
+////                id:lattAndLon
+////                text: lat + "   " + lon;
+
+
+////                font.pixelSize: 22;
+
+////            }
+//        }
 
 
         Rectangle {
@@ -140,42 +152,50 @@ openMap();
             anchors.horizontalCenter: parent.horizontalCenter;
             anchors.verticalCenter: parent.verticalCenter;
             color:"black"
+            radius: parent.height/4
 
-
-            Image {
-                id: weatherDiscIcon
-                source: "http://openweathermap.org/img/w/"+weatherIcon+".png"
-                anchors.bottom: currentTempLabel.top;
-                anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
-            }
-
-            Label {
-                id: currentTempLabel
-                text: (currentTemp-270) + "C"
+            Column{
                 anchors.verticalCenter:  parent.verticalCenter;
                 anchors.horizontalCenter: parent.horizontalCenter;
-                color:"white"
-                font.pixelSize: parent.width /3;
-                font.bold: true
-                fontSizeMode: Text.HorizontalFit;
-                maximumLineCount: 1;
-                Component.onCompleted: {
-                    //On completed make the API calls to get real weather data
+                Image {
+                    id: weatherDiscIcon
+                    source: "http://openweathermap.org/img/w/"+weatherIcon+".png"
+                    anchors.bottom:  todayTempBreakdown.bottom;
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    height: todayTempBreakdown.width /2;
+                    width: todayTempBreakdown.width /2;
                 }
 
+                Label {
+                    id: currentTempLabel
+                    text: (currentTemp-270) + "C"
+                    color:"white"
+                    anchors.top:  todayTempBreakdown.top;
+
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    font.pixelSize: todayTempBreakdown.width /3;
+                    font.bold: true
+                    fontSizeMode: Text.HorizontalFit;
+                    maximumLineCount: 1;
+                    Component.onCompleted: {
+                        //On completed make the API calls to get real weather data
+                    }
+
+                }
             }
 
             Label {
                 id: weatherDiscLabel
                 text: weatherDisc
-                anchors.top: currentTempLabel.bottom;
+    //            padding:100
+                anchors.top: todayTempBreakdown.bottom;
                 anchors.horizontalCenter: todayTempBreakdown.horizontalCenter;
                 font.pixelSize: parent.width/4;
                 color:"white"
             }
-
-
         }
+
+
 
 
 
@@ -260,11 +280,12 @@ openMap();
                 }
 
             }
-            TextArea {
-                anchors.left: parent.left
-                anchors.top: parent.top
-                text: networkRequest.readyState === NetworkRequest.DONE ? networkRequest.responseText : networkRequest.readyState
-            }
+//            TextArea {
+//                anchors.left: parent.left
+//                anchors.top: parent.top
+//                text: networkRequest.readyState === NetworkRequest.DONE ? networkRequest.responseText : networkRequest.readyState
+//            }
+
         }
 
     }
@@ -275,7 +296,7 @@ openMap();
         anchors.top: todaysTemp.bottom;
         anchors.left: parent.left;
         anchors.right: parent.right;
-        height: parent.height/2;
+        height: parent.height/3;
         color:"blue";
 
 
@@ -307,20 +328,33 @@ openMap();
             orientation: Qt.Horizontal
             layoutDirection: Qt.LeftToRight
             delegate: Column {
+                padding: 10
+                Rectangle {
+                  color: "green"; width: 200; height: nDayForecast.height-20
+                Column {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    Text { text: "\n" + date }
+                    Text { text: "\n"  + description }
+                    Image{ source: "http://openweathermap.org/img/w/"+icon+".png"  }
+                    Text { text: "high" + high + "\n"}
+                    Text { text: "low" + low + "\n"}
+                    Text { text: "humidity" + humidity+"%" + "\n"}
+
+                }
+                }
 
 
-                Text { text: "\n date: " + date + "\n"}
-                Text { text: "\n description"  + description }
-                Image{ source: "http://openweathermap.org/img/w/"+icon+".png"  }
-                Text { text: "high" + high + "\n"}
-                Text { text: "low" + low + "\n"}
-                Text { text: "humidity" + humidity+"%" + "\n"}
 
             }
         }
 
     }
 
+//    Component {
+
+//        id
+//    }
 
     function updateCurrentLocation(){
 
