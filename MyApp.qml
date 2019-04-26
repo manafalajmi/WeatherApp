@@ -37,6 +37,7 @@ App {
     width: 400
     height: 640
 
+
     //Navbar
     Rectangle {
         id: navbar
@@ -80,16 +81,7 @@ App {
         anchors.right: parent.right
         initialItem: theWeatherView
 
-        Button {
-            height: 50
-            width: parent.width /4
-            text: "Map"
-            font.pixelSize:20
-            anchors.top:parent.top
-            onClicked:{
 
-            }
-        }
 
 
 
